@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Token","Supported tokens types."]],"fn":[["tokenize","Create a new TokenIterator for a string."]],"struct":[["TokenIterator","Iterator over tokens in a string."]]});

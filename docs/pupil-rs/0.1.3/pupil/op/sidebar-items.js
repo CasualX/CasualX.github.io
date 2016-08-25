@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Assoc","Operator associativity."],["Operator","Supported operator types."],["Order","Operator precedence."]],"struct":[["OpDesc","Descriptor for an operator’s builtin, precedence, associativity and if available as unary operator."]]});

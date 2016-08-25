@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Error","Things that can go wrong while evaluating."]],"struct":[["Env","The environment."]],"type":[["BuiltinFn","Signature for builtins."],["Value","Underlying type used for arithmetic."]]});
