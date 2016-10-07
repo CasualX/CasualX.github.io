@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `RefProperty` struct in crate `cvar`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, RefProperty">
+
+    <title>cvar::RefProperty - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>cvar</a></p><script>window.sidebarCurrent = {name: 'RefProperty', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>cvar</a>::<wbr><a class='struct' href=''>RefProperty</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-138' class='srclink' href='../src/cvar/src/prop.rs.html#233-242' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct RefProperty&lt;'a,&nbsp;T,&nbsp;F&gt; <span class='where'>where T: 'a + <a class='trait' href='../cvar/trait.Value.html' title='cvar::Value'>Value</a>, F: <a class='trait' href='../cvar/trait.OnChange.html' title='cvar::OnChange'>OnChange</a>&lt;T&gt;</span> {
+    // some fields omitted
+}</pre><div class='docblock'><p>Property instance of <code>Clone</code> data.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl&lt;'a,&nbsp;T&gt; <a class='struct' href='../cvar/struct.RefProperty.html' title='cvar::RefProperty'>RefProperty</a>&lt;'a,&nbsp;T,&nbsp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt; <span class='where'>where T: 'a + <a class='trait' href='../cvar/trait.Value.html' title='cvar::Value'>Value</a></span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-147' class='srclink' href='../src/cvar/src/prop.rs.html#243-273' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>&lt;I:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.Into.html' title='core::convert::Into'>Into</a>&lt;T&gt;&gt;(name: &amp;'a <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, desc: &amp;'a <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, val: &amp;'a <a class='struct' href='https://doc.rust-lang.org/nightly/core/cell/struct.RefCell.html' title='core::cell::RefCell'>RefCell</a>&lt;T&gt;, def: I) -&gt; <a class='struct' href='../cvar/struct.RefProperty.html' title='cvar::RefProperty'>RefProperty</a>&lt;'a,&nbsp;T,&nbsp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
+<div class='docblock'><p>Creates a new <code>RefProperty</code>.</p>
+
+<p>Given a name, description, a reference to the underlying value and an appropriate default.</p>
+
+<h1 id='example' class='section-header'><a href='#example'>Example</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='comment'>// The underlying data wrapped in a `RefCell`.</span>
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>cell</span>::<span class='ident'>RefCell</span>;
+<span class='kw'>let</span> <span class='ident'>var</span> <span class='op'>=</span> <span class='ident'>RefCell</span>::<span class='ident'>new</span>(<span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;Hello, World!&quot;</span>));
+
+<span class='comment'>// The variable wrapped in a `RefProperty`.</span>
+<span class='kw'>use</span> <span class='ident'>cvar</span>::{<span class='ident'>RefProperty</span>, <span class='ident'>IProperty</span>};
+<span class='kw'>let</span> <span class='ident'>prop</span> <span class='op'>=</span> <span class='ident'>RefProperty</span>::<span class='ident'>new</span>(<span class='string'>&quot;prop&quot;</span>, <span class='string'>&quot;property description&quot;</span>, <span class='kw-2'>&amp;</span><span class='ident'>var</span>, <span class='string'>&quot;Hello, Default!&quot;</span>);
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>prop</span>.<span class='ident'>get</span>().<span class='ident'>unwrap</span>(), <span class='string'>&quot;Hello, World!&quot;</span>);
+<span class='ident'>prop</span>.<span class='ident'>reset</span>();
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='op'>*</span><span class='ident'>var</span>.<span class='ident'>borrow</span>(), <span class='string'>&quot;Hello, Default!&quot;</span>);</pre>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'a,&nbsp;T,&nbsp;F&gt; <a class='struct' href='../cvar/struct.RefProperty.html' title='cvar::RefProperty'>RefProperty</a>&lt;'a,&nbsp;T,&nbsp;F&gt; <span class='where'>where T: 'a + <a class='trait' href='../cvar/trait.Value.html' title='cvar::Value'>Value</a>, F: <a class='trait' href='../cvar/trait.OnChange.html' title='cvar::OnChange'>OnChange</a>&lt;T&gt;</span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-156' class='srclink' href='../src/cvar/src/prop.rs.html#274-292' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.checked' class='method'><code>fn <a href='#method.checked' class='fnname'>checked</a>&lt;I:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.Into.html' title='core::convert::Into'>Into</a>&lt;T&gt;&gt;(name: &amp;'a <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, desc: &amp;'a <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, val: &amp;'a <a class='struct' href='https://doc.rust-lang.org/nightly/core/cell/struct.RefCell.html' title='core::cell::RefCell'>RefCell</a>&lt;T&gt;, def: I, change: F) -&gt; <a class='struct' href='../cvar/struct.RefProperty.html' title='cvar::RefProperty'>RefProperty</a>&lt;'a,&nbsp;T,&nbsp;F&gt;</code></h4>
+<div class='docblock'><p>Creates a new <code>Property</code> with an onchange callback.</p>
+
+<p>Given a name, description, a reference to the underlying value, an appropriate default and a change callback.</p>
+
+<p>The change callback is called with a reference to the old value and a the new value after it has successfully parsed.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl&lt;'a,&nbsp;T,&nbsp;F&gt; <a class='trait' href='../cvar/trait.INode.html' title='cvar::INode'>INode</a> for <a class='struct' href='../cvar/struct.RefProperty.html' title='cvar::RefProperty'>RefProperty</a>&lt;'a,&nbsp;T,&nbsp;F&gt; <span class='where'>where T: 'a + <a class='trait' href='../cvar/trait.Value.html' title='cvar::Value'>Value</a>, F: <a class='trait' href='../cvar/trait.OnChange.html' title='cvar::OnChange'>OnChange</a>&lt;T&gt;</span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-167' class='srclink' href='../src/cvar/src/prop.rs.html#293-303' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.name' class='method'><code>fn <a href='../cvar/trait.INode.html#tymethod.name' class='fnname'>name</a>(&amp;self) -&gt; &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></h4>
+<div class='docblock'><p>The name of this node.</p>
+</div><h4 id='method.desc' class='method'><code>fn <a href='../cvar/trait.INode.html#tymethod.desc' class='fnname'>desc</a>(&amp;self) -&gt; &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></h4>
+<div class='docblock'><p>The description for this node.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'a,&nbsp;T,&nbsp;F&gt; <a class='trait' href='../cvar/trait.IProperty.html' title='cvar::IProperty'>IProperty</a> for <a class='struct' href='../cvar/struct.RefProperty.html' title='cvar::RefProperty'>RefProperty</a>&lt;'a,&nbsp;T,&nbsp;F&gt; <span class='where'>where T: 'a + <a class='trait' href='../cvar/trait.Value.html' title='cvar::Value'>Value</a>, F: <a class='trait' href='../cvar/trait.OnChange.html' title='cvar::OnChange'>OnChange</a>&lt;T&gt;</span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-175' class='srclink' href='../src/cvar/src/prop.rs.html#304-329' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.get' class='method'><code>fn <a href='../cvar/trait.IProperty.html#tymethod.get' class='fnname'>get</a>(&amp;self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,&nbsp;<a class='enum' href='../cvar/enum.InnerError.html' title='cvar::InnerError'>InnerError</a>&gt;</code></h4>
+<div class='docblock'><p>Get the value as a string.</p>
+</div><h4 id='method.set' class='method'><code>fn <a href='../cvar/trait.IProperty.html#tymethod.set' class='fnname'>set</a>(&amp;self, val: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>,&nbsp;<a class='enum' href='../cvar/enum.InnerError.html' title='cvar::InnerError'>InnerError</a>&gt;</code></h4>
+<div class='docblock'><p>Set the value.</p>
+</div><h4 id='method.reset' class='method'><code>fn <a href='../cvar/trait.IProperty.html#tymethod.reset' class='fnname'>reset</a>(&amp;self)</code></h4>
+<div class='docblock'><p>Reset the value to its default.</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "cvar";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script defer src="../search-index.js"></script>
+</body>
+</html>
