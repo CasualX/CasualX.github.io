@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Bool","A 16-bit Boolean value. A value of 0xFFFF (all bits 1) indicates true; a value of 0 (all bits 0) indicates false. No other values are valid."],["Currency","See msdn."],["Date","See msdn."],["Empty",""],["FileTime",""],["Int",""],["Null",""],["Ptr",""],["SCode","See msdn."],["UInt",""],["Void",""]],"type":[["HResult",""]]});

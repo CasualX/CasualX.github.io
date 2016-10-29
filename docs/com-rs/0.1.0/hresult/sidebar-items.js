@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Severity",""]],"mod":[["code","Common `HResult` error codes."],["facility","Overdone facility."]],"struct":[["HResult",""]]});

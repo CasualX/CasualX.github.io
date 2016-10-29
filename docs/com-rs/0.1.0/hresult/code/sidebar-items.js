@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["E_ABORT",""],["E_ACCESSDENIED",""],["E_FAIL",""],["E_HANDLE",""],["E_INVALIDARG",""],["E_NOINTERFACE",""],["E_NOTIMPL",""],["E_OUTOFMEMORY",""],["E_POINTER",""],["E_UNEXPECTED",""],["S_OK",""]]});

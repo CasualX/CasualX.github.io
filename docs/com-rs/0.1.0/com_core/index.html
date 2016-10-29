@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `com_core` crate.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, com_core">
+
+    <title>com_core - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'com_core', ty: 'mod', relpath: '../'};</script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>com_core</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-0' class='srclink' href='../src/com_core/src/lib.rs.html#1-84' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>Build Rust bindings for COM interfaces.</p>
+
+<h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> ::<span class='ident'>winapi</span>::<span class='ident'>HRESULT</span>;
+<span class='kw'>use</span> ::<span class='ident'>hr</span>::<span class='ident'>HResult</span>;
+
+<span class='kw'>use</span> ::<span class='ident'>com_core</span>::<span class='ident'>ComResult</span>;
+<span class='kw'>use</span> ::<span class='ident'>com_core</span>::<span class='ident'>com</span>::<span class='ident'>Com</span>;
+
+<span class='comment'>// Define the COM FFI interface struct and its vtbl struct.</span>
+
+<span class='kw'>use</span> ::<span class='ident'>com_core</span>::<span class='ident'>unknown</span>::{<span class='ident'>IUnknown</span>, <span class='ident'>IUnknownVtbl</span>};
+<span class='macro'>com_interface</span><span class='macro'>!</span> {
+    <span class='doccomment'>/// Doc comment.</span>
+    <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>IInterface</span>(<span class='ident'>IInterfaceVtbl</span>) : <span class='ident'>IUnknown</span>(<span class='ident'>IUnknownVtbl</span>);
+    {<span class='number'>0x582cdb5a</span><span class='op'>-</span><span class='number'>0xe8b9</span><span class='op'>-</span><span class='number'>0x47bb</span><span class='op'>-</span><span class='number'>0xbff8</span><span class='op'>-</span><span class='number'>0x5a18da55bc99</span>}
+    <span class='kw'>pub</span> <span class='ident'>Foo</span>: <span class='kw'>unsafe</span> <span class='kw'>extern</span> <span class='string'>&quot;stdcall&quot;</span> <span class='kw'>fn</span>(
+        <span class='ident'>This</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>IInterface</span>,
+    ) <span class='op'>-&gt;</span> <span class='ident'>HRESULT</span>,
+}
+
+<span class='comment'>// Define and implement the Rust binding for this interface.</span>
+
+<span class='kw'>use</span> ::<span class='ident'>com_core</span>::<span class='ident'>unknown</span>::<span class='ident'>IUnknownPtr</span>;
+<span class='macro'>com_ptr</span><span class='macro'>!</span> {
+    <span class='doccomment'>/// Doc comment.</span>
+    <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>Debug</span>)]</span>
+    <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>IInterfacePtr</span>(<span class='ident'>IInterface</span>) : <span class='ident'>IUnknownPtr</span>;
+}
+
+<span class='kw'>impl</span> <span class='ident'>IInterfacePtr</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>foo</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>ComResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+        <span class='kw'>unsafe</span> {
+            <span class='kw'>let</span> <span class='ident'>hr</span>: <span class='ident'>HResult</span> <span class='op'>=</span> <span class='macro'>com_call</span><span class='macro'>!</span>(<span class='ident'>Foo</span>(<span class='self'>self</span>)).<span class='ident'>into</span>();
+            <span class='ident'>hr</span>.<span class='ident'>result</span>(())
+        }
+    }
+}
+
+<span class='comment'>// An externally defined com class which implements `IInterface`.</span>
+
+<span class='macro'>com_class</span><span class='macro'>!</span>(<span class='ident'>_extern</span> <span class='ident'>Interface</span>, {<span class='number'>0xf08b1ee5</span><span class='op'>-</span><span class='number'>0xc953</span><span class='op'>-</span><span class='number'>0x4faf</span><span class='op'>-</span><span class='number'>0x813c</span><span class='op'>-</span><span class='number'>0x9bd256d6fe48</span>}, <span class='ident'>IInterface</span>);
+
+<span class='comment'>// Initialize COM and create an com pointer instance for this class.</span>
+
+<span class='kw'>let</span> <span class='ident'>com</span> <span class='op'>=</span> <span class='ident'>Com</span>::<span class='ident'>initialize</span>().<span class='ident'>unwrap</span>();
+<span class='kw'>let</span> <span class='ident'>interface_ptr</span> <span class='op'>=</span> <span class='ident'>com</span>.<span class='ident'>create_instance</span>::<span class='op'>&lt;</span><span class='ident'>IInterfacePtr</span>, <span class='ident'>Interface</span><span class='op'>&gt;</span>();
+
+<span class='comment'>// The above will fail because there&#39;s really no such class, but you get the point.</span>
+<span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>interface_ptr</span>.<span class='ident'>is_err</span>());</pre>
+</div><h2 id='reexports' class='section-header'><a href="#reexports">Reexports</a></h2>
+<table><tr><td><code>pub extern crate <a class='mod' href='../hresult/index.html' title='hresult'>hresult</a> as hr;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='com/index.html'
+                                  title='com_core::com'>com</a></td>
+                           <td class='docblock short'>
+                                <p>COM initialization.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='macros/index.html'
+                                  title='com_core::macros'>macros</a></td>
+                           <td class='docblock short'>
+                                <p>Automate COM plumbing.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='unknown/index.html'
+                                  title='com_core::unknown'>unknown</a></td>
+                           <td class='docblock short'>
+                                <p>Implements <code>IUnknown</code>.</p>
+                           </td>
+                       </tr></table><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.com_call!.html'
+                                  title='com_core::com_call!'>com_call!</a></td>
+                           <td class='docblock short'>
+                                <p>Calls a virtual function from a COM interface.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.com_class!.html'
+                                  title='com_core::com_class!'>com_class!</a></td>
+                           <td class='docblock short'>
+                                <p>Implements <code>ComClass</code> given a class, the interface it implements and its class id.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.com_interface!.html'
+                                  title='com_core::com_interface!'>com_interface!</a></td>
+                           <td class='docblock short'>
+                                <p>Defines an interface struct and its vtbl struct.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.com_ptr!.html'
+                                  title='com_core::com_ptr!'>com_ptr!</a></td>
+                           <td class='docblock short'>
+                                <p>Defines the rustic wrapper for a COM interface.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.com_vtbl!.html'
+                                  title='com_core::com_vtbl!'>com_vtbl!</a></td>
+                           <td class='docblock short'>
+                                <p>Defines a vtbl struct.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.guid!.html'
+                                  title='com_core::guid!'>guid!</a></td>
+                           <td class='docblock short'>
+                                <p>Constructs a GUID.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.static_guid!.html'
+                                  title='com_core::static_guid!'>static_guid!</a></td>
+                           <td class='docblock short'>
+                                <p>Defines a named static GUID.</p>
+                           </td>
+                       </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.AsComPtr.html'
+                                  title='com_core::AsComPtr'>AsComPtr</a></td>
+                           <td class='docblock short'>
+                                <p>Access the com interface pointer.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.ComCast.html'
+                                  title='com_core::ComCast'>ComCast</a></td>
+                           <td class='docblock short'>
+                                <p>Casts an instance to a related type.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.ComClass.html'
+                                  title='com_core::ComClass'>ComClass</a></td>
+                           <td class='docblock short'>
+                                <p>COM Class structs implement <code>ComClass</code>.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.ComClassInterface.html'
+                                  title='com_core::ComClassInterface'>ComClassInterface</a></td>
+                           <td class='docblock short'>
+                                <p>Declares the <a href="trait.ComInterface.html"><code>ComInterface</code></a>s which are implemented by a <a href="trait.ComClass.html"><code>ComClass</code></a>.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.ComInherit.html'
+                                  title='com_core::ComInherit'>ComInherit</a></td>
+                           <td class='docblock short'>
+                                <p>Declares a com interface inherits another interface.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.ComInterface.html'
+                                  title='com_core::ComInterface'>ComInterface</a></td>
+                           <td class='docblock short'>
+                                <p>COM Interface structs implement <code>ComInterface</code>.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.ComPtr.html'
+                                  title='com_core::ComPtr'>ComPtr</a></td>
+                           <td class='docblock short'>
+                                <p>Com pointers wrap the raw com interface pointers and give them a safe rustic interface.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.ComVtbl.html'
+                                  title='com_core::ComVtbl'>ComVtbl</a></td>
+                           <td class='docblock short'>
+                                <p>COM Vtbl structs implement <code>ComVtbl</code> which is little more than a marker.</p>
+                           </td>
+                       </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.ComResult.html'
+                                  title='com_core::ComResult'>ComResult</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr></table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "com_core";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

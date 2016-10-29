@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["BArray","Array backed `BSTR`."],["BStr","Borrowed `BSTR`."],["BString","System allocated `BSTR`."],["NullBStr","Empty borrowed string as a null `BSTR`."]],"trait":[["AsRawBStr","Borrow as raw `BSTR`."],["IntoBString","Convert into `BString`."]]});
