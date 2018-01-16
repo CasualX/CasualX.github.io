@@ -1,0 +1,43 @@
+<!-- coded by Medo of GG2, who showed me the correct formula in the first place -->
+<!doctype html>
+<html><head><title>Source FOV calculator</title>
+<script type="text/javascript">
+	function recalc() {
+		var desiredfov = deg2rad(document.getElementById("setfov").value);
+		var ratioDividend = document.getElementById("ratioDividend").value;
+		var ratioDivisor = document.getElementById("ratioDivisor").value;
+		var aspectRatio = ratioDividend/ratioDivisor;
+		var ratioRatio = aspectRatio/(4/3);
+		document.getElementById("result").value = 2*rad2deg(Math.atan(Math.tan(desiredfov/2)*ratioRatio));
+	}
+	function recalc2() {
+		var desiredfov = deg2rad(document.getElementById("wantedfov").value);
+		var ratioDividend = document.getElementById("ratioDividend2").value;
+		var ratioDivisor = document.getElementById("ratioDivisor2").value;
+		var aspectRatio = ratioDividend/ratioDivisor;
+		var ratioRatio = aspectRatio/(4/3);
+		document.getElementById("result2").value = 2*rad2deg(Math.atan(Math.tan(desiredfov/2)/ratioRatio));
+	}
+	
+	function deg2rad(x) { return x/180*Math.PI; }
+	function rad2deg(x) { return x*180/Math.PI; }
+</script>
+</head>
+<body style="font:12px Verdana;">
+<h1>What's the deal?</h1>
+FOV in source engine is "fun", because like almost all engines with Quake heritage, aspect ratio correction is done by scaling the horizontal FOV to keep the vertical FOV intact. This puts people with the same FOV but wider screens than others at an advantage.<br/>
+<br/>
+This isn't something that needs experimentation or evidence; it's a deterministic truth that people argue about even though it's been proven a million times before and always behaves exactly the same way.<br/>
+<br/>
+If you're interested in the math, just read the javascript at the top of this page's HTML.
+
+<h1>What's my real FOV?</h1>
+FOV setting: <input type="text" id="setfov" onkeyup="recalc()" onblur="recalc()"/><br/>
+Display aspect ratio: <input type="text" size="3" id="ratioDividend" onkeyup="recalc()" onblur="recalc()" value="16"/>:<input type="text" size="3" id="ratioDivisor" onkeyup="recalc()" onblur="recalc()" value="9"/><br/>
+Actual FOV: <input type="text" disabled="disabled" id="result"/>
+
+<h1>What should I set it to for X real FOV?</h1>
+Desired FOV: <input type="text" id="wantedfov" onkeyup="recalc2()" onblur="recalc2()"/><br/>
+Display aspect ratio: <input type="text" size="3" id="ratioDividend2" onkeyup="recalc2()" onblur="recalc2()" value="16"/>:<input type="text" size="3" id="ratioDivisor2" onkeyup="recalc2()" onblur="recalc2()" value="9"/><br/>
+Respective Setting: <input type="text" disabled="disabled" id="result2"/>
+</body></html>
