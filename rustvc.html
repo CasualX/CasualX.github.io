@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Rust tools for Visual C++</title>
+<style>
+.tcol {
+	display: flex;
+	max-width: 50em;
+}
+.tcol-left {
+	flex: 0 0 65%;
+}
+.tcol-right {
+	flex: 1;
+}
+textarea {
+	resize: vertical;
+}
+</style>
+<script type="text/javascript">
+"use strict"
+function utf16conv_update(e) {
+	let input = document.querySelector("#utf16conv-input");
+	let output = document.querySelector("#utf16conv-output");
+	let nul = document.querySelector("#utf16conv-nul");
+	let ins = input.value;
+	let outs = "static STRING: [u16; " + (ins.length + nul.checked) + "] = [";
+	for (let i = 0; i<ins.length; ++i) {
+		if (i != 0) {
+			outs += ", ";
+		}
+		outs += ins.charCodeAt(i);
+		if (i == 0) {
+			outs += "u16";
+		}
+	}
+	if (nul.checked) {
+		outs += ", 0";
+	}
+	outs += "];";
+	output.value = outs;
+}
+window.addEventListener('load', function(e) {
+	document.querySelector("#utf16conv-input").addEventListener('input', utf16conv_update);
+	document.querySelector("#utf16conv-nul").addEventListener('change', utf16conv_update);
+});
+</script>
+</head>
+<body>
+<h1>Rust tools for Visual C++</h1>
+
+<section id="utf16conv">
+	<h2>String to UTF-16 literal converter</h2>
+	<p>Rust has no support for UTF-16 string literals, which are needed to talk to Windows APIs. This tool converts your string literals to <code>u16</code> arrays.</p>
+	<div class="tcol">
+		<div class="tcol-left">
+			<p>Input string:<textarea id="utf16conv-input" rows="10" cols="60" placeholder="Input string"></textarea></p>
+			<p><input id="utf16conv-nul" type="checkbox" checked><label>Nul byte terminated string</label></p>
+		</div>
+		<div class="tcol-right">
+			<p>Output code:<textarea id="utf16conv-output" rows="12" cols="60" placeholder="Output code" readonly></textarea></p>
+		</div>
+	</div>
+</section>
+</body>
+</html>
